@@ -1,31 +1,35 @@
+import forecastio
 import smtplib
-from darksky import forecast
-import inspect
-import darksky
 from configs import *
 
-key = "43c6b72e8be91162c3aa43f4f87be22d"
 lat = "47.57070050000001"
-lon = "-122.38715259999998"
-myHouse = forecast(key, lat, lon)
+lng =  "-122.38715259999998"
 
+
+forecast = forecastio.load_forecast(api_key, lat, lng)
+
+current = forecast.currently()
+hourly =  forecast.hourly()
 
 user = "starbuckswork01@gmail.com"
 recipient = "grayson.stream@gmail.com"
 
+s = hourly.summary
+summary = s.encode('ascii', errors='ignore').decode()
+
 body = """\
-Subject: Daily Weather Email
+Subject: Daily Weather Email \n
+Summary for the day: {3} \n
 Currently the weather is: {0} degress \n
 It Feels like: {1} degress\n
-The wind is: {2}mph\n
-Summary for the day: {3}
-""".format(
-    myHouse.temperature,
-    myHouse.apparentTemperature,
-    myHouse.windSpeed,
-    myHouse.daily.data[0].summary,
-)
+The wind is: {2}mph
 
+""".format(
+    current.temperature,
+    current.apparentTemperature,
+    current.windSpeed,
+    summary,
+)
 try:
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.ehlo()
@@ -36,6 +40,8 @@ try:
     server.sendmail(user, recipient, body)
     server.close()
     print("Email has been sent")
-except:
-    print("Something went wrong...")
+except Exception as e: 
+    print("There was an error: \n"+str(e))
+    
+
 
