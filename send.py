@@ -2,7 +2,7 @@ import smtplib
 from darksky import forecast
 import inspect
 import darksky
-
+import * from config
 
 key = "43c6b72e8be91162c3aa43f4f87be22d"
 lat = "47.57070050000001"
@@ -10,9 +10,12 @@ lon = "-122.38715259999998"
 myHouse = forecast(key, lat, lon)
 
 
+
 user = "starbuckswork01@gmail.com"
-password = "xxxxxxxxxxxxxx"
+password = pwd
 recipient = "grayson.stream@gmail.com"
+
+
 body = """
 Hello Sailor from python code! {0}
 """.format(
