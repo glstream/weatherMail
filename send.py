@@ -1,8 +1,12 @@
 import smtplib
+import * from config
+
 
 user = "starbuckswork01@gmail.com"
-password = "xxxxxxxxxxxxxx"
+password = pwd
 recipient = "grayson.stream@gmail.com"
+
+
 body = """
 Hello Sailor from python code!
 """
