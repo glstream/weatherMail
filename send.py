@@ -1,7 +1,15 @@
 import forecastio
 import smtplib
 import requests
+import praw 
 from configs import *
+
+
+
+reddit = praw.Reddit(client_id=reddit_id,
+                     client_secret=reddit_secret,
+                     user_agent='testscript by /u/skysetter')
+
 
 lat = "47.57070050000001"
 lng =  "-122.38715259999998"
@@ -26,23 +34,27 @@ recipient = "grayson.stream@gmail.com"
 s = hourly.summary
 summary = s.encode('ascii', errors='ignore').decode()
 
-body = """\
-Subject: Daily Weather Email \n
-Summary for the day: {3} \n
-Currently the weather is: {0} degress \n
-It Feels like: {1} degress\n
-The wind is: {2}mph \n
-''{4}'' \n
-\t -{5}
+for text in reddit.subreddit('todayilearned').top('day', limit=1):
+    body = """\
+    Subject: Daily Weather Email \n
+    Summary for the day: {3} \n
+    Currently the weather is: {0} degress \n
+    It Feels like: {1} degress\n
+    The wind is: {2}mph \n
+    Interesting fact for today: {6}
+    Quote for day: ''{4}'' \n
+    \t -{5} \n
+    
 
-""".format(
-    current.temperature,
-    current.apparentTemperature,
-    current.windSpeed,
-    summary,
-    quote,
-    author
-)
+    """.format(
+        current.temperature,
+        current.apparentTemperature,
+        current.windSpeed,
+        summary,
+        quote,
+        author,
+        text.title
+    )
 try:
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.ehlo()
