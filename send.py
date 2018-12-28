@@ -35,26 +35,28 @@ s = hourly.summary
 summary = s.encode('ascii', errors='ignore').decode()
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
-    body = """\
-    Subject: Daily Weather Email \n
-    Summary for the day: {3} \n
-    Currently the weather is: {0} degress \n
-    It Feels like: {1} degress\n
-    The wind is: {2}mph \n
-    Interesting fact for today: {6}
-    Quote for day: ''{4}'' \n
-    \t -{5} \n
-    
+    encTitle = text.title
+    title = encTitle.encode('ascii', errors='ignore').decode()
+body = """\
+Subject: Daily Weather Email \n
+Summary for the day: {3} \n
+Currently the weather is: {0} degress \n
+It Feels like: {1} degress\n
+The wind is: {2}mph \n
+Interesting fact for today: {6} \n
+Quote for day: ''{4}'' \n
+\t -{5} \n
 
-    """.format(
-        current.temperature,
-        current.apparentTemperature,
-        current.windSpeed,
-        summary,
-        quote,
-        author,
-        text.title
-    )
+
+""".format(
+    current.temperature,
+    current.apparentTemperature,
+    current.windSpeed,
+    summary,
+    quote,
+    author,
+    title
+)
 try:
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.ehlo()
