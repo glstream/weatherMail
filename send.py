@@ -2,10 +2,13 @@ import forecastio
 import smtplib, ssl
 import requests
 import praw 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 
 from configs import *
 
-context = ssl.create_default_context()
+
 smtp_server = "smtp.gmail.com"
 port = 465
 reddit = praw.Reddit(client_id=reddit_id,
@@ -15,6 +18,7 @@ reddit = praw.Reddit(client_id=reddit_id,
 
 lat = "47.57070050000001"
 lng =  "-122.38715259999998"
+
 
 url = 'https://quotes.rest/qod'
 res = requests.get(url)
@@ -35,8 +39,15 @@ forecast = forecastio.load_forecast(api_key, lat, lng)
 current = forecast.currently()
 hourly =  forecast.hourly()
 
-user = "daily.weather.email@gmail.com"
-recipient = "grayson.stream@gmail.com"
+
+
+sender_email = "daily.weather.email@gmail.com"
+receiver_email  = "grayson.stream@gmail.com"
+
+message = MIMEMultipart("alternative")
+message["Subject"] = "Daily Weather Email"
+message["From"] = sender_email
+message["To"] = receiver_email
 
 s = hourly.summary
 summary = s.encode('ascii', errors='ignore').decode()
@@ -44,17 +55,27 @@ summary = s.encode('ascii', errors='ignore').decode()
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
     title = encTitle.encode('ascii', errors='ignore').decode()
-body = """\
-Subject: Daily Weather Email \n
-Summary for the day: {3} \n
-Currently the weather is: {0} degress \n
-It Feels like: {1} degress\n
-The wind is: {2}mph \n
-Interesting fact for today: {6} \n
-Quote for day: ''{4}'' \n
-\t -{5} \n
+
+imageFile= "C:\\Users\\grayson\\Documents\\project-folder\\python\\playground\\weather\\weatherMail\\images\\{0}.png".format(current.icon)
+# This example assumes the image is in the current directory
+fp = open(imageFile, 'rb')
+msgImage = MIMEImage(fp.read())
+fp.close()
 
 
+html = """\
+<html>
+  <body>
+<p><b>Summary for the day:</b> {3} </p><img src="cid:image1" style="width:50px;height:60px;">
+<p>Currently the weather is: {0} degrees<p>
+<p>It Feels like: {1} degress</p>
+<p>The wind is: {2}mph<p>
+<p>Interesting fact for today: {6} </p>
+<p>Quote for day: ''{4}''</p>
+<p>-{5}</p>
+
+  </body>
+</html>
 """.format(
     current.temperature,
     current.apparentTemperature,
@@ -64,15 +85,22 @@ Quote for day: ''{4}'' \n
     author,
     title
 )
+
+part1 = MIMEText(html, "html")
+msgImage.add_header('Content-ID', '<image1>')
+
+message.attach(part1)
+message.attach(msgImage)
+
 try:
    
-    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+    with smtplib.SMTP_SSL(smtp_server, port) as server:
         server.ehlo()
         # server.starttls()
-        server.login(user, pwd)
+        server.login(sender_email, pwd)
         print("Server Logged In")
 
-        server.sendmail(user, recipient, body)
+        server.sendmail(sender_email, receiver_email , message.as_string())
         server.close()
         print("Email has been sent")
 
