@@ -1,11 +1,13 @@
 import forecastio
-import smtplib
+import smtplib, ssl
 import requests
 import praw 
+
 from configs import *
 
-
-
+context = ssl.create_default_context()
+smtp_server = "smtp.gmail.com"
+port = 465
 reddit = praw.Reddit(client_id=reddit_id,
                      client_secret=reddit_secret,
                      user_agent='testscript by /u/skysetter')
@@ -17,8 +19,13 @@ lng =  "-122.38715259999998"
 url = 'https://quotes.rest/qod'
 res = requests.get(url)
 resData = res.json()
-data = resData['contents']['quotes']
-#data = [{u'category': u'inspire', u'permalink': u'https://theysaidso.com/quote/74RZL1_lOJ5uScr4h8ntCgeF/napoleon-hill-effort-only-fully-releases-its-reward-after-a-person-refuses-to-qu', u'tags': [u'effort', u'inspire'], u'quote': u'Effort only fully releases its reward after a person refuses to quit.', u'author': u'Napoleon Hill', u'length': u'69', u'background': u'https://theysaidso.com/img/bgs/man_on_the_mountain.jpg', u'date': u'2018-12-23', u'title': u'Inspiring Quote of the day', u'id': u'74RZL1_lOJ5uScr4h8ntCgeF'}]
+
+try: 
+    resData['contents']['quotes']
+    data = resData['contents']['quotes']
+except Exception as e:
+    print("Couldn't get quote needed using backup quote")
+    data = [{u'category': u'inspire', u'permalink': u'https://theysaidso.com/quote/74RZL1_lOJ5uScr4h8ntCgeF/napoleon-hill-effort-only-fully-releases-its-reward-after-a-person-refuses-to-qu', u'tags': [u'effort', u'inspire'], u'quote': u'Effort only fully releases its reward after a person refuses to quit.', u'author': u'Napoleon Hill', u'length': u'69', u'background': u'https://theysaidso.com/img/bgs/man_on_the_mountain.jpg', u'date': u'2018-12-23', u'title': u'Inspiring Quote of the day', u'id': u'74RZL1_lOJ5uScr4h8ntCgeF'}]
 
 quote = data[0]["quote"]
 author = data[0]["author"]
@@ -28,7 +35,7 @@ forecast = forecastio.load_forecast(api_key, lat, lng)
 current = forecast.currently()
 hourly =  forecast.hourly()
 
-user = "starbuckswork01@gmail.com"
+user = "daily.weather.email@gmail.com"
 recipient = "grayson.stream@gmail.com"
 
 s = hourly.summary
@@ -58,15 +65,17 @@ Quote for day: ''{4}'' \n
     title
 )
 try:
-    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-    server.ehlo()
-    # server.starttls()
-    server.login(user, pwd)
-    print("Server Logged In")
+   
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.ehlo()
+        # server.starttls()
+        server.login(user, pwd)
+        print("Server Logged In")
 
-    server.sendmail(user, recipient, body)
-    server.close()
-    print("Email has been sent")
+        server.sendmail(user, recipient, body)
+        server.close()
+        print("Email has been sent")
+
 except Exception as e: 
     print("There was an error: \n"+str(e))
     
