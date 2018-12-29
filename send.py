@@ -63,7 +63,7 @@ if sys.platform == "win32":
     imageFile= "{0}\\images\\{1}.png".format(dirPath,current.icon)
 else:
     imageFile= "{0}/images/{1}.png".format(dirPath,current.icon)
-    
+
 # This example assumes the image is in the current directory
 fp = open(imageFile, 'rb')
 msgImage = MIMEImage(fp.read())
@@ -101,15 +101,15 @@ message.attach(msgImage)
 
 try:
    
-    with smtplib.SMTP_SSL(smtp_server, port) as server:
-        server.ehlo()
-        # server.starttls()
-        server.login(sender_email, pwd)
-        print("Server Logged In")
+    server = smtplib.SMTP_SSL(smtp_server, port)
+    server.ehlo()
+    # server.starttls()
+    server.login(sender_email, pwd)
+    print("Server Logged In")
 
-        server.sendmail(sender_email, receiver_email , message.as_string())
-        server.close()
-        print("Email has been sent")
+    server.sendmail(sender_email, receiver_email , message.as_string())
+    server.close()
+    print("Email has been sent")
 
 except Exception as e: 
     print("There was an error: \n"+str(e))
