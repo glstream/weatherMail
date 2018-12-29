@@ -1,6 +1,6 @@
 import forecastio
 import smtplib, ssl
-import requests, os
+import requests, os, sys
 import praw 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -56,7 +56,14 @@ for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
     title = encTitle.encode('ascii', errors='ignore').decode()
 dirPath = os.path.dirname(os.path.realpath(__file__))
-imageFile= "{0}\\images\\{1}.png".format(dirPath,current.icon)
+
+
+if sys.platform == "win32":
+
+    imageFile= "{0}\\images\\{1}.png".format(dirPath,current.icon)
+else:
+    imageFile= "{0}/images/{1}.png".format(dirPath,current.icon)
+    
 # This example assumes the image is in the current directory
 fp = open(imageFile, 'rb')
 msgImage = MIMEImage(fp.read())
