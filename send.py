@@ -64,10 +64,19 @@ if sys.platform == "win32":
 else:
     imageFile= "{0}/images/{1}.png".format(dirPath,current.icon)
 
-# This example assumes the image is in the current directory
-fp = open(imageFile, 'rb')
-msgImage = MIMEImage(fp.read())
-fp.close()
+
+try: 
+    # This example assumes the image is in the current directory
+    fp = open(imageFile, 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
+except Exception as e:
+    print("Dont have icon for this weather")
+    imageFile= "{0}/images/{1}.jpg".format(dirPath,"platypus")
+    fp = open(imageFile, 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
+
 
 
 html = """\
