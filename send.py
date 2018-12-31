@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import forecastio
 import smtplib, ssl
 import requests, os, sys
