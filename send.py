@@ -72,7 +72,7 @@ else:
 
 try: 
     # This example assumes the image is in the current directory
-    fp = open(imageFile, 'rb')
+    fp = open(weatherImg, 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 except Exception as e:
@@ -83,14 +83,16 @@ except Exception as e:
     fp.close()
 
 
-fp2 = open(img2, 'rb')
+fp2 = open(tilImg, 'rb')
 msgImage2 = MIMEImage(fp2.read())
 fp2.close()
 
 
-fp3 = open(img3, 'rb')
+fp3 = open(quoteImg, 'rb')
 msgImage3 = MIMEImage(fp3.read())
 fp3.close()
+
+html = html.encode('ascii', errors='ignore').decode()
 
 html.format(
     current.temperature,
