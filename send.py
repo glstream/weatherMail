@@ -55,7 +55,7 @@ summary = s.encode('utf-8').decode()
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
-    title = encTitle.encode('ascii', errors='ignore').decode()
+    title = encTitle.encode('utf-8').decode()
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 
