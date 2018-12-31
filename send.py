@@ -51,7 +51,7 @@ message["From"] = sender_email
 message["To"] = receiver_email
 
 s = hourly.summary
-summary = s.encode('ascii', errors='ignore').decode()
+summary = s.encode('utf-8').decode()
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
@@ -165,7 +165,7 @@ html = """<head>
                                     <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 22px;">
                                         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #57697e;">
                                             {6}
-                                        </span></font>
+                                        </span></font>q
                                 </div>
                                 <!-- padding -->
                                 <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
