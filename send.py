@@ -1,9 +1,7 @@
-# encoding=utf8
-
-import forecastio
 import smtplib, ssl
 import requests, os, sys
 import praw 
+from darksky import forecast
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
@@ -16,10 +14,6 @@ port = 465
 reddit = praw.Reddit(client_id=reddit_id,
                      client_secret=reddit_secret,
                      user_agent='testscript by /u/skysetter')
-
-
-lat = "47.57070050000001"
-lng =  "-122.38715259999998"
 
 
 url = 'https://quotes.rest/qod'
@@ -36,11 +30,17 @@ except Exception as e:
 quote = data[0]["quote"]
 author = data[0]["author"]
 
-forecast = forecastio.load_forecast(api_key, lat, lng)
 
-current = forecast.currently()
-hourly =  forecast.hourly()
 
+lat = "47.57070050000001"
+lon =  "-122.38715259999998"
+forecast = forecast(api_key, lat, lon)
+
+icon = forecast.currently.icon
+temperature = forecast.currently.temperature
+feelsLike = forecast.currently.apparentTemperature
+windSpeed = forecast.currently.windSpeed
+summary = forecast.hourly.summary
 
 
 sender_email = "daily.weather.email@gmail.com"
@@ -51,8 +51,7 @@ message["Subject"] = "Daily Weather Email"
 message["From"] = sender_email
 message["To"] = receiver_email
 
-s = hourly.summary
-summary = s.encode('ascii', 'ignore').decode('ascii')
+
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
@@ -62,12 +61,12 @@ dirPath = os.path.dirname(os.path.realpath(__file__))
 
 if sys.platform == "win32":
 
-    weatherImg= "{0}\\images\\{1}.png".format(dirPath,current.icon)
+    weatherImg= "{0}\\images\\{1}.png".format(dirPath,icon)
     tilImg = "{0}\\images\\{1}.png".format(dirPath,"til")
     quoteImg = "{0}\\images\\{1}.png".format(dirPath,"quote")
 
 else:
-    weatherImg= "{0}/images/{1}.png".format(dirPath,current.icon)
+    weatherImg= "{0}/images/{1}.png".format(dirPath,icon)
     tilImg = "{0}/images/{1}.png".format(dirPath,"til")
     quoteImg = "{0}/images/{1}.png".format(dirPath,"quote")
 
@@ -235,9 +234,9 @@ html = """<head>
 </body>
 
 </html>""".format(
-    current.temperature,
-    current.apparentTemperature,
-    current.windSpeed,
+    temperature,
+    feelsLike,
+    windSpeed,
     summary,
     quote,
     author,

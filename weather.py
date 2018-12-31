@@ -11,8 +11,12 @@ forecast = forecast(api_key, lat, lon)
 
 icon = forecast.currently.icon
 temperature = forecast.currently.temperature
-
-
+feelsLike = forecast.currently.apparentTemperature
+windSpeed = forecast.currently.windSpeed
+summary = forecast.hourly.summary
 
 print(icon)
 print(temperature)
+print(feelsLike)
+print(windSpeed)
+print(summary)
