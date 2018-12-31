@@ -97,7 +97,6 @@ html = """<head>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
-
 <body>
     <div id="mailsub" class="notification" align="center">
 
@@ -127,11 +126,9 @@ html = """<head>
                                     <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 16px;">
                                         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #57697e;">
                                             <p>Daily Summary: {3}</p>
-                                            <ul style="list-style: none;">
-                                            <li>Current Temp: {0} degrees</li>
-                                            <li>Feels like: {1} degrees</li>
-                                            <li>Wind Speed: {2}mph</li>
-                                            </ul>
+                                            <p>Current Temperature: {0} degrees</p>
+                                            <p>Feels like: {1} degrees</p>
+                                            <p>Wind Speed: {2}mph</p>
                                         </span></font>
                                 </div>
                                 <!-- padding -->
