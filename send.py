@@ -54,8 +54,8 @@ message["To"] = receiver_email
 
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
-    encTitle = text.title
-    title = encTitle.encode('utf-8').strip()
+    title = text.title
+    # title = encTitle.encode('utf-8').strip()
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 
