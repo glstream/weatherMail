@@ -115,15 +115,23 @@ html = """<head>
                                 <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
+                        <td align="center">
+                        <font face="Arial, Helvetica, sans-serif" size="3" color="#8A2BE2" style="font-size: 14px;" >
+								<strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #8A2BE2;">
+									<a href="#2" target="_blank" style="color: #8A2BE2; text-decoration: none;">WEATHER</a>
+								</strong></font>
+                        </td>
                         <tr>
                             <td align="center">
                                 <div style="line-height: 12px;">
                                     <font face="Arial, Helvetica, sans-serif" size="5" color="#57697e" style="font-size: 16px;">
                                         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #57697e;">
                                             <p>Daily Summary: {3}</p>
-                                            <p>Current Temperature: {0} degrees</p>
-                                            <p>Feels like: {1} degrees</p>
-                                            <p>Wind Speed: {2}mph</p>
+                                            <ul style="list-style: none;">
+                                            <li>Current Temp: {0} degrees</li>
+                                            <li>Feels like: {1} degrees</li>
+                                            <li>Wind Speed: {2}mph</li>
+                                            </ul>
                                         </span></font>
                                 </div>
                                 <!-- padding -->
@@ -142,12 +150,18 @@ html = """<head>
                                 <!-- padding -->
                                 <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                                 <div style="line-height: 22px;">
-                                    <img src="cid:image2" alt="quote-icon" border="0" style="width:120px;height:120px;" />
+                                    <img src="cid:image2" alt="quote-icon" border="0" style="width:220px;height:120px;" />
                                 </div>
                                 <!-- padding -->
                                 <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
+                         <td align="center">
+                        <font face="Arial, Helvetica, sans-serif" size="3" color="#8A2BE2" style="font-size: 14px;" >
+								<strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #8A2BE2;">
+									<a href="#2" target="_blank" style="color: #8A2BE2; text-decoration: none;">TODAY I LEARNED</a>
+								</strong></font>
+                        </td>
                         <tr>
                             <td align="center">
                                 <div style="line-height: 12px;">
@@ -186,6 +200,12 @@ html = """<head>
                                 <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
+                        <td align="center">
+                        <font face="Arial, Helvetica, sans-serif" size="3" color="#8A2BE2" style="font-size: 14px;" >
+								<strong style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #8A2BE2;">
+									<a href="#2" target="_blank" style="color: #8A2BE2; text-decoration: none;">QUOTE OF THE DAY</a>
+								</strong></font>
+                        </td>
                         <tr>
                             <td align="center">
                                 <div style="line-height: 12px;">
