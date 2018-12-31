@@ -216,9 +216,7 @@ html = """<head>
         </table>
 </body>
 
-</html>"""
-
-html.format(
+</html>""".format(
     current.temperature,
     current.apparentTemperature,
     current.windSpeed,
