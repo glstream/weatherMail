@@ -1,7 +1,5 @@
 # encoding=utf8
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+
 import forecastio
 import smtplib, ssl
 import requests, os, sys
