@@ -51,11 +51,11 @@ message["From"] = sender_email
 message["To"] = receiver_email
 
 s = hourly.summary
-summary = s.encode('utf-8').decode()
+summary = s.encode('ascii', 'ignore').decode('ascii')
 
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
-    title = encTitle.encode('utf-8').decode()
+    title = encTitle.encode('ascii', 'ignore').decode('ascii')
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 
