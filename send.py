@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
 from configs import *
+from emailTemplate import *
 
 
 smtp_server = "smtp.gmail.com"
@@ -55,15 +56,19 @@ summary = s.encode('ascii', errors='ignore').decode()
 for text in reddit.subreddit('todayilearned').top('day', limit=1):
     encTitle = text.title
     title = encTitle.encode('ascii', errors='ignore').decode()
-dirPath = os.path.dirname(os.path.realpath(__file__))
 
+dirPath = os.path.dirname(os.path.realpath(__file__))
 
 if sys.platform == "win32":
 
-    imageFile= "{0}\\images\\{1}.png".format(dirPath,current.icon)
-else:
-    imageFile= "{0}/images/{1}.png".format(dirPath,current.icon)
+    weatherImg= "{0}\\images\\{1}.png".format(dirPath,current.icon)
+    tilImg = "{0}\\images\\{1}.png".format(dirPath,"til")
+    quoteImg = "{0}\\images\\{1}.png".format(dirPath,"quote")
 
+else:
+    weatherImg= "{0}/images/{1}.png".format(dirPath,current.icon)
+    tilImg = "{0}/images/{1}.png".format(dirPath,"til")
+    quoteImg = "{0}/images/{1}.png".format(dirPath,"quote")
 
 try: 
     # This example assumes the image is in the current directory
@@ -72,27 +77,22 @@ try:
     fp.close()
 except Exception as e:
     print("Dont have icon for this weather")
-    imageFile= "{0}/images/{1}.jpg".format(dirPath,"platypus")
+    imageFile= "{0}/images/{1}.png".format(dirPath,"platypus")
     fp = open(imageFile, 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 
 
+fp2 = open(img2, 'rb')
+msgImage2 = MIMEImage(fp2.read())
+fp2.close()
 
-html = """\
-<html>
-  <body>
-<p><b>Summary for the day:</b> {3} </p><img src="cid:image1" style="width:50px;height:60px;">
-<p>Currently the weather is: {0} degrees<p>
-<p>It Feels like: {1} degress</p>
-<p>The wind is: {2}mph<p>
-<p>Interesting fact for today: {6} </p>
-<p>Quote for day: ''{4}''</p>
-<p>-{5}</p>
 
-  </body>
-</html>
-""".format(
+fp3 = open(img3, 'rb')
+msgImage3 = MIMEImage(fp3.read())
+fp3.close()
+
+html.format(
     current.temperature,
     current.apparentTemperature,
     current.windSpeed,
@@ -104,9 +104,13 @@ html = """\
 
 part1 = MIMEText(html, "html")
 msgImage.add_header('Content-ID', '<image1>')
+msgImage2.add_header('Content-ID', '<image2>')
+msgImage3.add_header('Content-ID', '<image3>')
 
 message.attach(part1)
 message.attach(msgImage)
+message.attach(msgImage2)
+message.attach(msgImage3)
 
 try:
    
