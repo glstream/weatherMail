@@ -7,8 +7,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
 from configs import *
-from emailTemplate import *
-
 
 smtp_server = "smtp.gmail.com"
 port = 465
