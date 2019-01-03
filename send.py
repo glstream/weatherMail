@@ -18,7 +18,7 @@ reddit = praw.Reddit(client_id=reddit_id,
 def redditTitle(sub, limit =1):
     for text in reddit.subreddit(sub).top('day', limit=limit):
         title = text.title
-        return
+        return title
 
 url = 'https://quotes.rest/qod'
 res = requests.get(url)
