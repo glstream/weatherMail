@@ -9,13 +9,45 @@ from email.mime.image import MIMEImage
 from configs import *
 
 
-smtp_server = "smtp.gmail.com"
-port = 465
+lat = "47.57070050000001"
+lon =  "-122.38715259999998"
+
+def weatherCall(lat, lon, api_key=api_key):
+
+    cast = forecast(api_key, lat, lon)
+
+    icon = cast.currently.icon
+    temperature = cast.currently.temperature
+    feelsLike = cast.currently.apparentTemperature
+    windSpeed = cast.currently.windSpeed
+    summary = cast.hourly.summary
+    return (icon, temperature, feelsLike, windSpeed, summary)
+
+icon, temperature, feelsLike, windSpeed, summary = weatherCall(lat, lon)
+
+    # file folder path locations
+
+dirPath = os.path.dirname(os.path.realpath(__file__))
+
+if sys.platform == "win32":
+
+    weatherImg= "{0}\\images\\{1}.png".format(dirPath,icon)
+    tilImg = "{0}\\images\\{1}.png".format(dirPath,"til")
+    quoteImg = "{0}\\images\\{1}.png".format(dirPath,"quote")
+
+else:
+    weatherImg= "{0}/images/{1}.png".format(dirPath,icon)
+    tilImg = "{0}/images/{1}.png".format(dirPath,"til")
+    quoteImg = "{0}/images/{1}.png".format(dirPath,"quote")
+
+
+# reddit function
 reddit = praw.Reddit(client_id=reddit_id,
                      client_secret=reddit_secret,
                      user_agent='testscript by /u/skysetter')
 
 def redditTitle(sub, limit =1):
+    """returns the title for the #1 post of that day"""
     for text in reddit.subreddit(sub).top('day', limit=limit):
         title = text.title
         return title
@@ -35,18 +67,6 @@ quote = data[0]["quote"]
 author = data[0]["author"]
 
 
-
-lat = "47.57070050000001"
-lon =  "-122.38715259999998"
-forecast = forecast(api_key, lat, lon)
-
-icon = forecast.currently.icon
-temperature = forecast.currently.temperature
-feelsLike = forecast.currently.apparentTemperature
-windSpeed = forecast.currently.windSpeed
-summary = forecast.hourly.summary
-
-
 sender_email = "daily.weather.email@gmail.com"
 receiver_email  = "grayson.stream@gmail.com"
 
@@ -55,22 +75,6 @@ message["Subject"] = "Daily Weather Email"
 message["From"] = sender_email
 message["To"] = receiver_email
 
-
-
-
-
-dirPath = os.path.dirname(os.path.realpath(__file__))
-
-if sys.platform == "win32":
-
-    weatherImg= "{0}\\images\\{1}.png".format(dirPath,icon)
-    tilImg = "{0}\\images\\{1}.png".format(dirPath,"til")
-    quoteImg = "{0}\\images\\{1}.png".format(dirPath,"quote")
-
-else:
-    weatherImg= "{0}/images/{1}.png".format(dirPath,icon)
-    tilImg = "{0}/images/{1}.png".format(dirPath,"til")
-    quoteImg = "{0}/images/{1}.png".format(dirPath,"quote")
 
 try: 
     # This example assumes the image is in the current directory
@@ -253,17 +257,28 @@ message.attach(msgImage)
 message.attach(msgImage2)
 message.attach(msgImage3)
 
-try:
-   
-    server = smtplib.SMTP_SSL(smtp_server, port)
+
+def sendMail(server, port, sender_email, receiver_email, message, pwd=pwd):
+    server = smtplib.SMTP_SSL(server, port)
     server.ehlo()
-    # server.starttls()
     server.login(sender_email, pwd)
     print("Server Logged In")
 
-    server.sendmail(sender_email, receiver_email , message.as_string())
+    server.sendmail(sender_email, receiver_email, message.as_string())
     server.close()
     print("Email has been sent")
+
+try:
+   sendMail("smtp.gmail.com", 465, sender_email, receiver_email, message)
+    # server = smtplib.SMTP_SSL(smtp_server, port)
+    # server.ehlo()
+    # # server.starttls()
+    # server.login(sender_email, pwd)
+    # print("Server Logged In")
+
+    # server.sendmail(sender_email, receiver_email , message.as_string())
+    # server.close()
+    # print("Email has been sent")
 
 except Exception as e: 
     print("There was an error: \n"+str(e))
