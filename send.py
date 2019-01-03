@@ -15,6 +15,10 @@ reddit = praw.Reddit(client_id=reddit_id,
                      client_secret=reddit_secret,
                      user_agent='testscript by /u/skysetter')
 
+def redditTitle(sub, limit =1):
+    for text in reddit.subreddit(sub).top('day', limit=limit):
+        title = text.title
+        return
 
 url = 'https://quotes.rest/qod'
 res = requests.get(url)
@@ -53,9 +57,7 @@ message["To"] = receiver_email
 
 
 
-for text in reddit.subreddit('todayilearned').top('day', limit=1):
-    title = text.title
-    # title = encTitle.encode('utf-8').strip()
+
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 
@@ -99,7 +101,6 @@ html = """<head>
 </head>
 <body>
     <div id="mailsub" class="notification" align="center">
-
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px;">
             <tr>
                 <td align="center" bgcolor="#eff3f8">
@@ -111,7 +112,7 @@ html = """<head>
                                 <!-- padding -->
                                     <img src="cid:image1" alt="weather-icon" border="0" style="width:120px;height:120px;" />
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                         <td align="center">
@@ -132,7 +133,7 @@ html = """<head>
                                         </span></font>
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                     </table>
@@ -145,12 +146,12 @@ html = """<head>
                         <tr>
                             <td align="center">
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                                 <div style="line-height: 22px;">
                                     <img src="cid:image2" alt="quote-icon" border="0" style="width:220px;height:120px;" />
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                          <td align="center">
@@ -168,7 +169,7 @@ html = """<head>
                                         </span></font>q
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                         <tr>
@@ -176,7 +177,7 @@ html = """<head>
                                 <div style="line-height: 24px;">
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                     </table>
@@ -189,12 +190,12 @@ html = """<head>
                         <tr>
                             <td align="center">
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                                 <div style="line-height: 22px;">
                                     <img src="cid:image3" alt="til-icon" border="0" style="width:120px;height:120px;" />
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                         <td align="center">
@@ -213,7 +214,7 @@ html = """<head>
                                         </span></font>
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
+                                <div style="height: 40px; line-height: 40px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                         <tr>
@@ -221,7 +222,7 @@ html = """<head>
                                 <div style="line-height: 24px;">
                                 </div>
                                 <!-- padding -->
-                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
+                                <div style="height: 10px; line-height: 10px; font-size: 10px;"> </div>
                             </td>
                         </tr>
                     </table>
@@ -232,7 +233,6 @@ html = """<head>
         </tr>
         </table>
 </body>
-
 </html>""".format(
     temperature,
     feelsLike,
@@ -240,7 +240,7 @@ html = """<head>
     summary,
     quote,
     author,
-    title
+    redditTitle('todayilearned')
 )
 
 part1 = MIMEText(html, "html")
@@ -267,6 +267,3 @@ try:
 
 except Exception as e: 
     print("There was an error: \n"+str(e))
-    
-
-
